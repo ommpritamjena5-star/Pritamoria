@@ -1,0 +1,126 @@
+=== PRITAMORIA USER DATA STORAGE ===
+
+This file explains how user authentication data is stored in the Pritamoria application.
+
+📁 STORAGE METHOD:
+-----------------
+User data is stored using browser localStorage (simulating a text file database).
+- Storage Key: 'pritamoria_users_data'
+- Format: JSON array of user objects
+- Location: Browser's local storage
+
+⚠️ SECURITY NOTICE:
+------------------
+This storage method is for DEMONSTRATION PURPOSES ONLY and is NOT SECURE for production use:
+- Passwords are stored in PLAIN TEXT (not encrypted)
+- Data can be easily accessed through browser developer tools
+- No protection against unauthorized access
+- Not suitable for storing sensitive information
+
+For production use, you should implement:
+1. Proper backend authentication system
+2. Password hashing (bcrypt, argon2, etc.)
+3. Secure database storage
+4. HTTPS encryption
+5. Session management
+6. Token-based authentication (JWT)
+
+📋 USER DATA STRUCTURE:
+----------------------
+Each user record contains:
+{
+  "id": "unique_user_id",
+  "name": "User's Full Name",
+  "email": "user@example.com",
+  "password": "plain_text_password",  // ⚠️ NOT SECURE
+  "createdAt": "2025-10-19T..."
+}
+
+🔄 HOW IT WORKS:
+---------------
+1. SIGN UP:
+   - User enters name, email, and password
+   - System checks if email already exists
+   - If new, user data is added to localStorage
+   - User is automatically logged in
+
+2. SIGN IN:
+   - User enters email and password
+   - System searches for user by email
+   - Password is compared directly (plain text)
+   - If match, user is logged in
+
+3. DATA PERSISTENCE:
+   - Data persists in browser even after closing
+   - Data is specific to the browser and domain
+   - Clearing browser data will delete all users
+
+📊 VIEWING STORED DATA:
+----------------------
+You can view the stored user data by:
+1. Opening browser Developer Tools (F12)
+2. Going to "Application" or "Storage" tab
+3. Clicking on "Local Storage"
+4. Finding the key: "pritamoria_users_data"
+
+Or programmatically in the browser console:
+```javascript
+// View all users
+JSON.parse(localStorage.getItem('pritamoria_users_data'))
+
+// Clear all users
+localStorage.removeItem('pritamoria_users_data')
+```
+
+🌿 NEW FEATURES ADDED:
+---------------------
+1. ✅ Text-based User Authentication System
+   - Sign up with name, email, password
+   - Sign in with email/password verification
+   - Data stored in browser localStorage
+   - Password confirmation during signup
+   - Duplicate email detection
+
+2. ✅ Disease Detection Feature
+   - AI-powered visual disease analysis
+   - Analyzes uploaded plant images for symptoms
+   - Detects up to 8 common plant diseases
+   - Provides comprehensive information:
+     * Disease symptoms
+     * Causes and risk factors
+     * Treatment steps
+     * Prevention tips
+   - Health score calculation
+   - Severity rating (low/medium/high)
+   - Confidence scoring for each detection
+
+📝 DISEASE DATABASE:
+-------------------
+The system can detect:
+1. Leaf Spot Disease
+2. Powdery Mildew
+3. Root Rot
+4. Yellowing Leaves (Chlorosis)
+5. Pest Infestation
+6. Sunburn / Leaf Scorch
+7. Bacterial Blight
+8. Nutrient Deficiency
+
+Each disease includes detailed:
+- Visual indicators (colors, patterns, textures)
+- Symptom descriptions
+- Root causes
+- Treatment procedures
+- Prevention strategies
+
+🚀 USAGE TIPS:
+--------------
+- Upload 4-5 clear photos for best disease detection
+- Include close-ups of affected areas
+- Capture different angles and plant parts
+- Good lighting improves analysis accuracy
+
+---
+Last Updated: October 19, 2025
+Pritamoria Plant Identification System
+Version: 2.0
