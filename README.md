@@ -2,6 +2,16 @@
 
 <div align="center">
   <img src="./public/pritamoria_logo.jpeg" alt="Pritamoria Logo" width="200" style="border-radius: 20px; box-shadow: 0 0 20px rgba(34,197,94,0.4);" />
+
+  <p align="center">
+    <a href="https://pritamoria.vercel.app" target="_blank" rel="noopener noreferrer">
+      <img src="https://img.shields.io/badge/Deploy-Vercel-black?style=for-the-badge&logo=vercel" alt="Vercel Deploy" />
+    </a>
+  </p>
+
+  <p align="center">
+    🚀 <strong>Live Demo:</strong> <a href="https://pritamoria.vercel.app" target="_blank" rel="noopener noreferrer">pritamoria.vercel.app</a>
+  </p>
 </div>
 
 ## 📖 What is Pritamoria?
@@ -43,59 +53,3 @@ The primary purpose of Pritamoria is to provide farmers, gardeners, botanists, a
   - Welcome greetings upon registration.
   - Security alerts when a new login is detected.
 - **Advanced Password Recovery:** Users can reset passwords securely via a 6-digit OTP sent to their email, followed by a password reset confirmation email.
-
-## 🛠️ Technology Stack
-
-Pritamoria is built on a modern, high-performance web stack:
-
-### Frontend (Client-Side)
-- **Framework:** React 18 + Vite (for lightning-fast builds)
-- **Styling:** Tailwind CSS (with custom Glassmorphism, dark mode aesthetics, and animations)
-- **Icons & UI:** Lucide React, Radix UI components
-- **Routing:** React Router
-
-### Backend (Server-Side)
-- **Runtime:** Node.js
-- **Framework:** Express.js
-- **Database:** MongoDB (Local instance for rapid data processing) via Mongoose
-- **Authentication:** Custom token/session logic with encrypted validation.
-
-### Artificial Intelligence & APIs
-- **Core AI Engine:** Google Generative AI (`@google/generative-ai` - Gemini 1.5/2.5 Flash models)
-- **Speech Recognition:** Web Speech API integration for the Chatbot.
-
-### Communication
-- **Email Service:** Nodemailer using Gmail SMTP (IPv4 forced, secure transmission) to handle OTPs and alerts.
-
-## 🚀 Getting Started
-
-### Prerequisites
-- Node.js (v18 or higher)
-- MongoDB running locally on port `27017`
-
-### Environment Configuration
-Create a `.env` file in the root directory of the project:
-```env
-VITE_GEMINI_API_KEY=your_gemini_api_key
-EMAIL_USER=your_email@gmail.com
-EMAIL_PASS=your_app_password
-```
-
-### Running the Application
-
-**1. Start the Backend Server:**
-Open a terminal and navigate to the backend directory:
-```bash
-cd backend
-npm install
-node server.js
-```
-
-**2. Start the Frontend Application:**
-Open a second terminal in the root directory:
-```bash
-npm install
-npm run dev
-```
-
-Your application will now be running on the local network!
