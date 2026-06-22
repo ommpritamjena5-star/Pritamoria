@@ -5,7 +5,7 @@ export interface StoredUser {
   id: string;
 }
 
-const API_BASE_URL = '/api/auth';
+const API_BASE_URL = `${import.meta.env.VITE_BACKEND_URL || ''}/api/auth`;
 
 // Register a new user
 export async function registerUser(name: string, email: string, phoneNumber: string, password: string): Promise<{ success: boolean; message: string; user?: StoredUser }> {

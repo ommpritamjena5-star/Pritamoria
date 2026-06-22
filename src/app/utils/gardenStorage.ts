@@ -38,7 +38,7 @@ export interface PersonalizedPlant {
   createdAt: string;
 }
 
-const API_BASE_URL = '/api/garden';
+const API_BASE_URL = `${import.meta.env.VITE_BACKEND_URL || ''}/api/garden`;
 
 // Helper to get local plants
 function getLocalPlants(userId: string): PersonalizedPlant[] {

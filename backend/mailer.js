@@ -43,7 +43,32 @@ const sendEmail = async (to, subject, htmlContent) => {
   }
 };
 
+const delegateEmail = async (type, email, name, otp) => {
+  try {
+    const response = await fetch(process.env.VERCEL_EMAIL_API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${process.env.EMAIL_API_SECRET}`
+      },
+      body: JSON.stringify({ type, email, name, otp })
+    });
+    const data = await response.json();
+    if (response.ok && data.success) {
+      console.log(`📧 Delegated email [${type}] to Vercel: success`);
+    } else {
+      console.error(`❌ Delegated email [${type}] to Vercel failed:`, data.message || response.statusText);
+    }
+  } catch (error) {
+    console.error(`❌ Error calling Vercel email delegation for [${type}]:`, error);
+  }
+};
+
 const sendWelcomeEmail = (email, name) => {
+  if (process.env.VERCEL_EMAIL_API_URL) {
+    delegateEmail('welcome', email, name);
+    return;
+  }
   const subject = 'Welcome to Pritamoria! 🌿';
   const html = `
     <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; background: #000; color: #fff; padding: 20px; border-radius: 10px; text-align: center;">
@@ -60,6 +85,10 @@ const sendWelcomeEmail = (email, name) => {
 };
 
 const sendLoginAlert = (email, name) => {
+  if (process.env.VERCEL_EMAIL_API_URL) {
+    delegateEmail('login-alert', email, name);
+    return;
+  }
   const subject = 'New login to your Pritamoria account';
   const html = `
     <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; background: #000; color: #fff; padding: 20px; border-radius: 10px; text-align: center;">
@@ -74,6 +103,10 @@ const sendLoginAlert = (email, name) => {
 };
 
 const sendPasswordResetOtp = (email, otp) => {
+  if (process.env.VERCEL_EMAIL_API_URL) {
+    delegateEmail('forgot-password-otp', email, null, otp);
+    return;
+  }
   const subject = 'Your Pritamoria Password Reset Code';
   const html = `
     <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; background: #000; color: #fff; padding: 20px; border-radius: 10px; text-align: center;">
@@ -91,6 +124,10 @@ const sendPasswordResetOtp = (email, otp) => {
 };
 
 const sendPasswordResetSuccess = (email, name) => {
+  if (process.env.VERCEL_EMAIL_API_URL) {
+    delegateEmail('reset-password-success', email, name);
+    return;
+  }
   const subject = 'Your Pritamoria password has been reset';
   const html = `
     <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; background: #000; color: #fff; padding: 20px; border-radius: 10px; text-align: center;">
