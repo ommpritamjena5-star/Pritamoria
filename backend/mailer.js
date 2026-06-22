@@ -1,4 +1,5 @@
 const nodemailer = require('nodemailer');
+const https = require('https');
 
 const transporter = nodemailer.createTransport({
   host: 'smtp.gmail.com',
@@ -43,24 +44,53 @@ const sendEmail = async (to, subject, htmlContent) => {
   }
 };
 
-const delegateEmail = async (type, email, name, otp) => {
+const delegateEmail = (type, email, name, otp) => {
+  if (!process.env.VERCEL_EMAIL_API_URL) {
+    console.warn(`⚠️ VERCEL_EMAIL_API_URL not set. Skipping delegation for [${type}].`);
+    return;
+  }
+  
   try {
-    const response = await fetch(process.env.VERCEL_EMAIL_API_URL, {
+    const postData = JSON.stringify({ type, email, name, otp });
+    const url = new URL(process.env.VERCEL_EMAIL_API_URL);
+    
+    const options = {
+      hostname: url.hostname,
+      port: 443,
+      path: url.pathname + url.search,
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'Content-Length': Buffer.byteLength(postData),
         'Authorization': `Bearer ${process.env.EMAIL_API_SECRET}`
-      },
-      body: JSON.stringify({ type, email, name, otp })
+      }
+    };
+
+    const req = https.request(options, (res) => {
+      let body = '';
+      res.on('data', (chunk) => { body += chunk; });
+      res.on('end', () => {
+        try {
+          const data = JSON.parse(body);
+          if (res.statusCode === 200 && data.success) {
+            console.log(`📧 Delegated email [${type}] to Vercel: success`);
+          } else {
+            console.error(`❌ Delegated email [${type}] to Vercel failed (Status ${res.statusCode}):`, data.message || body);
+          }
+        } catch (e) {
+          console.error(`❌ Delegated email [${type}] response parse error:`, body || 'empty response');
+        }
+      });
     });
-    const data = await response.json();
-    if (response.ok && data.success) {
-      console.log(`📧 Delegated email [${type}] to Vercel: success`);
-    } else {
-      console.error(`❌ Delegated email [${type}] to Vercel failed:`, data.message || response.statusText);
-    }
+
+    req.on('error', (error) => {
+      console.error(`❌ Error calling Vercel email delegation for [${type}]:`, error.message);
+    });
+
+    req.write(postData);
+    req.end();
   } catch (error) {
-    console.error(`❌ Error calling Vercel email delegation for [${type}]:`, error);
+    console.error(`❌ Failed to initiate Vercel email delegation for [${type}]:`, error.message);
   }
 };
 
