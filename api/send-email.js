@@ -1,6 +1,6 @@
-const nodemailer = require('nodemailer');
-const path = require('path');
-const fs = require('fs');
+import nodemailer from 'nodemailer';
+import path from 'path';
+import fs from 'fs';
 
 const transporter = nodemailer.createTransport({
   host: 'smtp.gmail.com',
@@ -13,7 +13,7 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-module.exports = async (req, res) => {
+export default async function handler(req, res) {
   // CORS support
   res.setHeader('Access-Control-Allow-Credentials', true);
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -136,4 +136,4 @@ module.exports = async (req, res) => {
     console.error('❌ Vercel Serverless Nodemailer Error:', error);
     return res.status(500).json({ success: false, error: error.message });
   }
-};
+}
